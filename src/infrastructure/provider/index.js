@@ -3,10 +3,10 @@ import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import { RootStoreProvider, rootStore } from "application/models";
 
-const AppProvider = (props) => {
+const AppProvider = ({ children, store }) => {
   return (
     <React.StrictMode>
-      <RootStoreProvider value={rootStore}>{props.children}</RootStoreProvider>
+      <RootStoreProvider value={store}>{children}</RootStoreProvider>
     </React.StrictMode>
   );
 };

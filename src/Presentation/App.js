@@ -1,25 +1,49 @@
-import TodoList from "./Components/TodoList";
-import AppLayout from "./Containers/Layout/index";
-import { Typography } from "antd";
-import { useStores } from "application/models";
+import React, { useEffect, useState } from "react";
+import TodoList from "Presentation/Components/TodoList";
+import AppLayout from "Presentation/Containers/Layout/index";
+import { Typography, Col, Row } from "antd";
+import AppProvider from "infrastructure/provider/index";
+import { initRootStore } from "application/models/store";
+import api from "infrastructure/services/api/index";
+import dataMapper from "infrastructure/services/dataMapper/index";
 
 const { Title } = Typography;
-function App() {
-  const { todoStore } = useStores();
+
+const App = () => {
+  const [rootStore, setRootStore] = useState(undefined);
+
+  useEffect(() => {
+    (async () => {
+      const store = await initRootStore(api, dataMapper);
+      console.log(store);
+      setRootStore(store);
+    })();
+  }, []);
+
   const handleClick = () => {
-    todoStore[0].todoItems[0].dummyChange();
+    rootStore.todoStore[0].todoItems[0].dummyChange();
   };
 
+  if (!rootStore) return null;
   return (
-    <AppLayout>
-      <Title>TodoList App</Title>
-      <div>
-        <TodoList todoList={todoStore[0]} />
-      </div>
-      <br />
-      <button onClick={handleClick}>click me</button>
-    </AppLayout>
+    <AppProvider store={rootStore}>
+      <AppLayout>
+        <Title>TodoList App</Title>
+        <div>
+          <Row gutter={16}>
+            <Col span={8}>
+              <TodoList todoList={rootStore.todoStore[0]} />
+            </Col>
+            <Col span={8}>
+              <TodoList todoList={rootStore.todoStore[1]} />
+            </Col>
+          </Row>
+        </div>
+        <br />
+        <button onClick={handleClick}>click me</button>
+      </AppLayout>
+    </AppProvider>
   );
-}
+};
 
 export default App;

@@ -8,7 +8,7 @@ const TodoItem = ({ todoItem }) => {
     <List.Item actions={[]}>
       <List.Item.Meta
         title={
-          <Checkbox onChange={todoItem.toggleDone}>
+          <Checkbox checked={todoItem.done} onChange={todoItem.toggleDone}>
             <Text level={2} delete={todoItem.done}>
               {todoItem.title}
             </Text>
