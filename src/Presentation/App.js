@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import TodoList from "Presentation/Components/TodoList";
-import AppLayout from "Presentation/Containers/Layout/index";
-import { Typography, Col, Row } from "antd";
-import AppProvider from "infrastructure/provider/index";
 import { initRootStore } from "application/models/store";
+import AppProvider from "infrastructure/provider/index";
 import api from "infrastructure/services/api/index";
 import dataMapper from "infrastructure/services/dataMapper/index";
-
-const { Title } = Typography;
+import AppLayout from "Presentation/Containers/Layout/index";
+import TodoListPage from "Presentation/Containers/TodoListPage";
+import HomePage from "Presentation/Containers/HomePage";
+import { Route, Switch } from "react-router-dom";
+import ProtectedRoute from "Presentation/Routes/ProtectedRoute";
 
 const App = () => {
   const [rootStore, setRootStore] = useState(undefined);
@@ -20,27 +20,17 @@ const App = () => {
     })();
   }, []);
 
-  const handleClick = () => {
-    rootStore.todoStore[0].todoItems[0].dummyChange();
-  };
-
   if (!rootStore) return null;
   return (
     <AppProvider store={rootStore}>
       <AppLayout>
-        <Title>TodoList App</Title>
-        <div>
-          <Row gutter={16}>
-            <Col span={8}>
-              <TodoList todoList={rootStore.todoStore[0]} />
-            </Col>
-            <Col span={8}>
-              <TodoList todoList={rootStore.todoStore[1]} />
-            </Col>
-          </Row>
-        </div>
-        <br />
-        <button onClick={handleClick}>click me</button>
+        <Switch>
+          <ProtectedRoute exact path="/todolist" component={TodoListPage} />
+          <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route>NotFound</Route>
+        </Switch>
       </AppLayout>
     </AppProvider>
   );

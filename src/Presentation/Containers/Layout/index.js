@@ -1,53 +1,83 @@
-import React from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Layout, Menu, Typography } from "antd";
+import logo from "assets/todo-icon.png";
 import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
   UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
+  VideoCameraOutlined,
+  LoginOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 
-const { SubMenu } = Menu;
-const { Header, Content, Sider } = Layout;
+const { Header, Sider, Content } = Layout;
+const { Text } = Typography;
 
-const AppLayout = (props) => {
+const AppLayout = ({ children }) => {
+  const [collapsed, setCollapsed] = useState(false);
+  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
-    <Layout>
-      <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
+        <div className="logo">
+          <img alt="app logo" src={logo} />
+          <Text strong>Todo App</Text>
+        </div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+          <Menu.Item key="1" icon={<UserOutlined />}>
+            <Link to="/">Home</Link>
+          </Menu.Item>
+          {isAuthenticated && (
+            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+              <Link to="/todolist">TodoLists</Link>
+            </Menu.Item>
+          )}
+          {!isAuthenticated ? (
+            <Menu.Item
+              onClick={() => loginWithRedirect()}
+              key="3"
+              icon={<LoginOutlined />}
+            >
+              LogIn
+            </Menu.Item>
+          ) : (
+            <Menu.Item
+              onClick={() => logout({ returnTo: window.location.origin })}
+              key="4"
+              icon={<LogoutOutlined />}
+            >
+              LogOut
+            </Menu.Item>
+          )}
         </Menu>
-      </Header>
-      <Layout>
-        <Sider width={200} className="site-layout-background">
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{ height: "100%", borderRight: 0 }}
-          >
-            <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
-              <Menu.Item key="1">option1</Menu.Item>
-              <Menu.Item key="2">option2</Menu.Item>
-              <Menu.Item key="3">option3</Menu.Item>
-              <Menu.Item key="4">option4</Menu.Item>
-            </SubMenu>
-          </Menu>
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-            }}
-          >
-            {props.children}
-          </Content>
-        </Layout>
+      </Sider>
+      <Layout className="site-layout">
+        <Header className="site-layout-background" style={{ padding: 0 }}>
+          {React.createElement(
+            collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
+            {
+              className: "trigger",
+              onClick: toggleCollapsed,
+            }
+          )}
+        </Header>
+        <Content
+          className="site-layout-background"
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+          }}
+        >
+          {children}
+        </Content>
       </Layout>
     </Layout>
   );
