@@ -40,9 +40,26 @@ export const TodoList = types
     },
   }));
 
+const layoutStoreModel = types
+  .model({
+    direction: types.optional(types.string, "ltr"),
+    locale: types.optional(types.string, "en"),
+  })
+  .actions((self) => ({
+    setDirection(direction) {
+      self.direction = direction;
+    },
+    setLocale(locale) {
+      self.locale = locale;
+      if (locale === "ar") self.direction = "rtl";
+      else self.direction = "ltr";
+    },
+  }));
+
 export const storeModel = types
   .model({
-    todoStore: types.array(TodoList),
+    // todoStore: types.array(TodoList),
+    layoutStore: layoutStoreModel,
   })
   .actions((self) => ({
     removeList(idx) {},
@@ -55,6 +72,12 @@ export const initRootStore = async (api, dataMapper) => {
     todoStore: todoLists,
   });
 };
+
+export const initialRootStore = storeModel.create({
+  layoutStore: {
+    direction: "ltr",
+  },
+});
 
 // export const rootStore = storeModel.create({
 //   todoStore: [

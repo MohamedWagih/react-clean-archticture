@@ -32,7 +32,7 @@ const TodoList = ({ todoList }) => {
           </Paragraph>
         }
         bordered={true}
-        style={{ width: 300 }}
+        // style={{ width: 300 }}
         bodyStyle={{ padding: "5px 10px" }}
         actions={[
           <DeleteOutlined key="delete" onClick={showModal} />,

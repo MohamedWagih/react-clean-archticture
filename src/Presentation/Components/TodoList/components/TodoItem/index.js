@@ -5,9 +5,6 @@ import { DeleteOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const TodoItem = ({ todoItem }) => {
-  // const handleTitleChange = (value) => {
-  //   todoItem.updateTitle(value);
-  // };
   const handleItemRemove = () => {
     todoItem.remove();
   };
