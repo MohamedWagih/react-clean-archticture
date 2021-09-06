@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { initialRootStore } from "application/models/store";
 import AppProvider from "infrastructure/provider/index";
 import AppLayout from "Presentation/Containers/Layout/index";
@@ -15,20 +15,22 @@ const App = () => {
   if (!rootStore) return null;
   return (
     <AppProvider store={rootStore} queryClient={queryClient}>
-      <AppLayout>
-        <Switch>
-          {routes.map((route) => (
-            <Route
-              key={route.path}
-              path={route.path}
-              component={route.component}
-              protectedRoute={route.protected}
-              exact={route.exact}
-            />
-          ))}
-          <Route>NotFound</Route>
-        </Switch>
-      </AppLayout>
+      <Suspense fallback="loading">
+        <AppLayout>
+          <Switch>
+            {routes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                component={route.component}
+                protectedRoute={route.protected}
+                exact={route.exact}
+              />
+            ))}
+            <Route>NotFound</Route>
+          </Switch>
+        </AppLayout>
+      </Suspense>
     </AppProvider>
   );
 };

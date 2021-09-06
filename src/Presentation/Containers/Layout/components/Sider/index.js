@@ -3,6 +3,7 @@ import { Layout, Menu, Typography } from "antd";
 import { Link } from "react-router-dom";
 import logo from "assets/todo-icon.png";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useTranslation } from "react-i18next";
 import {
   UserOutlined,
   VideoCameraOutlined,
@@ -15,20 +16,21 @@ const { Text } = Typography;
 
 const LayoutSider = () => {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { t } = useTranslation();
 
   return (
     <Sider collapsible>
       <div className="logo">
         <img alt="app logo" src={logo} />
-        <Text strong>Todo App</Text>
+        <Text strong>{t("sider.logoHeader")}</Text>
       </div>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
         <Menu.Item key="1" icon={<UserOutlined />}>
-          <Link to="/">Home</Link>
+          <Link to="/">{t("sider.home")}</Link>
         </Menu.Item>
         {isAuthenticated && (
           <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-            <Link to="/todolist">TodoLists</Link>
+            <Link to="/todolist">{t("sider.todolists")}</Link>
           </Menu.Item>
         )}
         {!isAuthenticated ? (
@@ -37,7 +39,7 @@ const LayoutSider = () => {
             key="3"
             icon={<LoginOutlined />}
           >
-            LogIn
+            {t("sider.login")}
           </Menu.Item>
         ) : (
           <Menu.Item
@@ -45,7 +47,7 @@ const LayoutSider = () => {
             key="4"
             icon={<LogoutOutlined />}
           >
-            LogOut
+            {t("sider.logout")}
           </Menu.Item>
         )}
       </Menu>

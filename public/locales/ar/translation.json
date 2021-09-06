@@ -1,0 +1,13 @@
+{
+    "title": "اهلا بكم في react-i18next",
+    "sider": {
+        "logoHeader": "المفكره",
+        "home": "الرئيسية",
+        "todolists": "قوائم المفكرات",
+        "login": "تسجيل الدخول",
+        "logout": "تسجيل الخروج"
+    },
+    "todolistPage": {
+        "header": "المفكرات"
+    }
+}

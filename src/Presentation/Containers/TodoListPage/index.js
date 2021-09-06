@@ -5,11 +5,13 @@ import { Typography, Col, Row, Spin, message } from "antd";
 import { useStores } from "application/models";
 import { observer } from "mobx-react-lite";
 import { useGetTodoLists } from "infrastructure/services/Todos";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
 const TodoListPage = () => {
   const { data: todoLists, isLoading, error } = useGetTodoLists();
+  const { t } = useTranslation();
 
   if (isLoading) return <Spin size="large" />;
 
@@ -17,7 +19,7 @@ const TodoListPage = () => {
 
   return (
     <>
-      <Title>TodoList App</Title>
+      <Title>{t("todolistPage.header")}</Title>
       <div>
         <Row gutter={[32, 24]} justify="space-between">
           {todoLists.map((list) => (

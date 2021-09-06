@@ -1,15 +1,17 @@
 import React from "react";
 import { useStores } from "application/models";
 import { Layout, Button, Row, Col } from "antd";
+import { useTranslation } from "react-i18next";
 
 const { Header } = Layout;
 const LayoutHeader = () => {
   const { layoutStore } = useStores();
+  const { i18n } = useTranslation();
 
   const toggleLocale = () => {
     layoutStore.locale === "ar"
-      ? layoutStore.setLocale("en")
-      : layoutStore.setLocale("ar");
+      ? i18n.changeLanguage("en", () => layoutStore.setLocale("en"))
+      : i18n.changeLanguage("ar", () => layoutStore.setLocale("ar"));
   };
   return (
     <Header className="header">
