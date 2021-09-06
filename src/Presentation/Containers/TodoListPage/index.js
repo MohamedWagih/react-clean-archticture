@@ -1,5 +1,5 @@
 import React from "react";
-import TodoList from "Presentation/Components/TodoList";
+import TodoList from "./components/TodoList";
 
 import { Typography, Col, Row, Spin, message } from "antd";
 import { useStores } from "application/models";
